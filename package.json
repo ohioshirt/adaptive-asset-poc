@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test", "demo": "python3 -m http.server 8000 --bind 127.0.0.1" },
+  "scripts": { "test": "node --test", "test:browser": "node smoke/browser-smoke.mjs", "demo": "python3 -m http.server 8000 --bind 127.0.0.1" },
   "engines": { "node": ">=20" }
 }

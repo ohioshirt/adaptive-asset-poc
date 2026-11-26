@@ -1,5 +1,7 @@
 # Initial verification
 
+> 2026-11-27 追記: 下記の「実ブラウザでは未検証」は、Chrome と Firefox については [M0 の実験ノート](experiments/m0-baseline.md) で解消した。`npm test` は現在 20 件。音を耳で聞く確認と Safari は引き続き未実施で、下の手動手順が有効。以下は初回コミット時点の記録としてそのまま残す。
+
 Executed during repository creation (Node 22.16.0, Python 3, Pillow 12.3.0, FFmpeg with libvpx-vp9):
 
 - `npm test`: 9/9 pass (independent safe points, in-flight atomicity, cancellation, validation, replay, event ordering, routing, invalid edges, global clock).

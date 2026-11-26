@@ -4,11 +4,39 @@ permissions:
   contents: read
 jobs:
   runtime:
-    runs-on: ubuntu-latest
+    # Pinned image: ubuntu-latest moves between releases and would change the baseline silently.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20', '22']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm test
+      - run: for f in demo/*.mjs smoke/*.mjs; do node --check "$f"; done
+  browser:
+    # Real browser smoke test with the Chrome preinstalled on the runner image.
+    # No npm install, no secrets, no network access beyond 127.0.0.1.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm test
-      - run: node --check demo/app.mjs
+      - run: google-chrome --version
+      - run: npm run test:browser
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+          # The runner is an ephemeral VM serving only this repository's synthetic files.
+          SMOKE_CHROME_ARGS: --no-sandbox
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-smoke-chrome
+          path: artifacts/browser-smoke/
+          if-no-files-found: error

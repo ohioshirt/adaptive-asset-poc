@@ -4,7 +4,9 @@
 
 ## 判定
 
-ローカルで確認できる完了条件は満たした。**GitHub Actions 上でのブラウザスモークテストはまだ一度も実行していない**ため、M0 の完了判定は CI の初回実行結果を見るまで保留とする。
+**M0 の完了条件は満たした。** ローカルの Chrome と Firefox に加え、GitHub Actions の `browser` ジョブが初回実行で通過した（[run 45867810650](https://github.com/ohioshirt/adaptive-asset-poc/actions/runs/45867810650)、コミット `18af984`）。M1 へ進む技術的な障害は見つかっていない。
+
+この判定が含まないものは「検証していないこと」に挙げた。主なものは、人の目と耳による確認、Safari、動画での記録である。CI についてこのノートが記録しているのは初回の 1 回分で、繰り返し実行したときの失敗率は測っていない。
 
 | Issue #2 の完了条件 | 状態 | 根拠 |
 |---|---|---|
@@ -12,8 +14,8 @@
 | reproducible trace | 満たした | 同じスクリプトの論理トレースが、tick 間隔の異なる run・音声クロックの run・Chrome と Firefox のすべてで同一 |
 | screenshot/video | スクリーンショットのみ | `m0/chrome/` の PNG 3 枚。動画は撮っていない |
 | PNG アトラスと実際の WebM 再生の区別 | 満たした | デモは PNG アトラスだけを描画する。WebM は別ページのプローブで実際にデコードして計測した |
-| browser/OS と実再生結果の記録 | 満たした（Chrome・Firefox） | 下の「結果」。Safari は実行できていない |
-| CI のブラウザスモークテスト | 定義済み・未実行 | `.github/workflows/test.yml` の `browser` ジョブ。push していないので結果はない |
+| browser/OS と実再生結果の記録 | 満たした（Chrome・Firefox） | 下の「結果」。macOS と Linux の Chrome、macOS の Firefox。Safari は実行できていない |
+| CI のブラウザスモークテスト | 満たした | `browser` ジョブが 27 / 27 チェックで通過。secrets と有料推論は使っていない。下の「Chrome（GitHub Actions）」 |
 
 ## 何を作ったか
 
@@ -160,6 +162,37 @@ SMOKE_BROWSER=manual npm run test:browser  # 表示された URL を任意のブ
 | concern_neutral | OK | 0.6 | 12 | 12 | true | true | 0 | 1.16 | 0.63 | 0.07 |
 | concern_smile | OK | 0.6 | 12 | 12 | true | true | 1 | 1.1 | 0.62 | 0.07 |
 
+### Chrome（GitHub Actions、ヘッドレス）
+
+- 実行: [run 45867810650](https://github.com/ohioshirt/adaptive-asset-poc/actions/runs/45867810650)、コミット `18af984`、ランナーイメージ `ubuntu-24.04` 20261122.23.1。`runtime (20)` と `runtime (22)` のジョブも通過した。
+- 証跡: `m0/ci-chrome/summary.json`（ジョブの成果物 `browser-smoke-chrome` からコピー。成果物そのものは 2027-02-24 に失効する）
+- ブラウザ: `Chrome/158.0.8127.36`（`--no-sandbox` 付き、ヘッドレス）
+- 実行環境: linux 7.0.0-1018-aws x64 / Intel(R) Xeon(R) 6975P-C 4 コア / 15 GB / Node v22.23.5
+- 開始時刻 (UTC): 2026-11-26T17:27:10.459Z
+- 結果: PASS（27 / 27 チェック）
+- 論理トレース sha256: `396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7`（スクリプト実行の全 run で一致: true、5 run）
+- `canPlayType`: vp9=`probably`, webm=`maybe`
+- 最終ポーズの canvas 照合: `smile.png` に対し 2 以上ずれた画素 0、±1 の画素 0、不透明画素 15606、左上アルファ 0
+- 遷移中の canvas 照合（8 回）: `neutral_concern:0`, `neutral_concern:0`, `neutral_concern:0`, `neutral_concern:0`, `neutral_concern:3`, `neutral_concern:3`, `neutral_concern:3`, `neutral_concern:3`。2 以上ずれた画素の最大 0
+- ページ例外・コンソールエラー: 0 件
+
+| run | clock | tick 数 | tick 間隔 p50 ms | p95 ms | 最大 ms | start 遅延 n | start 遅延 p50 ms | 最大 ms | 描画した別個のフレーム数 |
+|---|---|---|---|---|---|---|---|---|---|
+| wall-native | wall | 285 | 16.7 | 16.8 | 16.8 | 7 | 5 | 6 | 63 |
+| wall-10fps | wall | 48 | 100 | 100.1 | 100.1 | 7 | 20 | 20 | 33 |
+| wall-4fps | wall | 20 | 250 | 250.1 | 250.1 | 7 | 6 | 206 | 16 |
+| audio-native | audio | 287 | 16.7 | 16.7 | 16.8 | 7 | 9 | 11 | 63 |
+| visual | wall | 278 | 16.7 | 16.7 | 100 | 7 | 7 | 7 | 61 |
+| interactive | wall | 152 | 16.7 | 16.7 | 16.8 | 1 | 16 | 16 | 14 |
+
+| clip | 判定 | 長さ s | 提示フレーム | 採取フレーム | アルファ保持 | 内容一致 | index ずれ最大 | 特徴領域の差 最大 | 全体の色差 最大 | アルファ差 最大 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| neutral_smile | OK | 0.6 | 12 | 11 | true | true | 0 | 1.11 | 0.62 | 0.07 |
+| neutral_concern | OK | 0.6 | 12 | 11 | true | true | 0 | 1.14 | 0.63 | 0.07 |
+| smile_neutral | OK | 0.6 | 12 | 11 | true | true | 0 | 1.1 | 0.62 | 0.07 |
+| smile_concern | OK | 0.6 | 12 | 11 | true | true | 0 | 1.1 | 0.62 | 0.07 |
+| concern_neutral | OK | 0.6 | 12 | 11 | true | true | 0 | 1.16 | 0.63 | 0.07 |
+| concern_smile | OK | 0.6 | 12 | 11 | true | true | 0 | 1.1 | 0.62 | 0.07 |
 
 表の読み方:
 
@@ -175,11 +208,12 @@ SMOKE_BROWSER=manual npm run test:browser  # 表示された URL を任意のブ
 - **対話入力の時刻はアプリケーション層が決める。** デモはクリックハンドラ内で読んだ時計を刻印する。ランタイムは入力時刻の概念を持たない。
 - **Chrome と Firefox は透過 VP9 WebM をアルファ付きでデコードした。** Chrome の `requestVideoFrameCallback` はヘッドレスで 12 フレーム中 6〜11 枚しか届かなかった。フレーム単位の同期をこのコールバックに頼る設計は M2 で検証が要る。
 - **canvas を一度読み戻すと、Chrome では以後の読み戻し値が ±1 ずれることがある。** 切り分け用の実験で、同じ canvas を 2 回読むとチャンネル値 57 個が 1 だけ違った。画素照合は ±1 を許容している（結果欄の「±1 の画素 52」は、スモークテスト本体で数えた画素数で、別の計測）。
+- **音声デバイスのない CI ランナーでも `AudioContext` の時計は進んだ。** `audio-native` の run は `running`・44100 Hz を報告し、4710 ms まで進んで論理トレースが一致した。事前に最も疑っていた失敗要因は起きなかった。
 - **Safari は画面ロック中に計測できなかった。** ページと素材の取得までは進んだが、タブが描画されないため結果が返らなかった。
 
 ## 検証していないこと
 
-- **GitHub Actions での実行。** `ubuntu-24.04` イメージに Google Chrome が入っていることはイメージの README で確認したが、Linux の Chrome でこのテストを走らせたことはない。特に、音声デバイスのないランナーで `AudioContext` の時計が進むかは不明で、進まなければ `audio-native` が失敗する。`--no-sandbox` はランナーでのサンドボックス起動可否を確かめずに指定している。
+- **CI の安定性。** このノートが記録している GitHub Actions の実行は初回の 1 回分で、繰り返し実行したときの失敗率は測っていない。`--no-sandbox` を外してもランナーで起動できるかは試していない。
 - **音。** 誰も音を聞いていない。`AudioContext` が `running` を報告したことと、音声クロックで論理トレースが一致したことしか確認していない。`--disable-audio-output` を付けても同じチェックが通るので、可聴出力やクロスフェードの正しさの証拠にはならない。
 - **人の目による確認。** 計測はすべてヘッドレスか画面ロック中に行った。画面を見た人はいない。スクリーンショットは CDP で取得したものである。
 - **Safari と WebKit。** 上記のとおり未実行。透過 VP9 を Safari がどう扱うかはこのリポジトリでは未確認。
@@ -207,8 +241,10 @@ SMOKE_BROWSER=manual npm run test:browser  # 表示された URL を任意のブ
 - 1 ステップの失敗で後続が実行されなくなる構造を改め、失敗を記録して続行するようにした。
 - 静的サーバーの配信範囲を `demo/` と `src/` に絞った。
 
-## M1 へ進む前に
+## 残っている確認
 
-1. このブランチを push して CI の `browser` ジョブの結果を確認する。失敗したら M1 より先に直す。落ちた場合にまず疑う箇所は、音声デバイスのない環境での `audio-native`、WebM 内容照合の位置許容幅（±1 フレーム。ローカルでも上限の 1 に達することがある）、対話 run の「クリックの刻印が 1500 ms 未満」の 3 つ。
+いずれも M0 の完了条件には含まれないが、M2 で再生を扱う前に済ませておきたい。
+
+1. CI の `browser` ジョブは通過済み。今後失敗した場合にまず疑う箇所は、WebM 内容照合の位置許容幅（±1 フレーム。ローカルでは上限の 1 に達することがある）と、対話 run の「クリックの刻印が 1500 ms 未満」の 2 つ。
 2. 画面ロックを解除した状態で `SMOKE_BROWSER=safari npm run test:browser` を実行し、結果をこのノートに追記する。
 3. デモを開いて、音声ありで遷移を目と耳で確認する（`docs/verification.md` の手順）。

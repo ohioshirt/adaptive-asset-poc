@@ -1,0 +1,598 @@
+{
+  "schema": "adaptive-asset-smoke/1",
+  "startedAt": "2026-11-26T17:27:10.459Z",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-1018-aws",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) 6975P-C",
+    "cores": 4,
+    "memoryGb": 15,
+    "node": "v22.23.5",
+    "ci": true
+  },
+  "scenario": {
+    "script": "130:tense,350:friendly,2000:tense,2900:neutral,3000:friendly",
+    "untilMs": 4700
+  },
+  "referenceHash": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+  "referenceEvents": [
+    "200 face start neutral->concern",
+    "800 face end neutral->concern",
+    "800 face start concern->smile",
+    "1400 face end concern->smile",
+    "2000 audio start calm->alert",
+    "2000 face start smile->concern",
+    "2400 audio end calm->alert",
+    "2600 face end smile->concern",
+    "3000 face start concern->neutral",
+    "3600 face end concern->neutral",
+    "3600 face start neutral->smile",
+    "4000 audio start alert->calm",
+    "4200 face end neutral->smile",
+    "4400 audio end alert->calm"
+  ],
+  "checks": [
+    {
+      "name": "wall-native: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "wall-native: clock source is wall",
+      "ok": true
+    },
+    {
+      "name": "wall-native: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "wall-native: every transition drew at least 6 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: clock source is wall",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: every transition drew at least 1 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: ticks were really limited to about 10 per second",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: clock source is wall",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: every transition drew at least 1 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: ticks were really limited to about 4 per second",
+      "ok": true
+    },
+    {
+      "name": "audio-native: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "audio-native: clock source is audio",
+      "ok": true
+    },
+    {
+      "name": "audio-native: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "audio-native: every transition drew at least 6 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "audio-native: AudioContext reported running (says nothing about audible output)",
+      "ok": true
+    },
+    {
+      "name": "visual: canvas shows the transition atlas frame the app selected, pixel for pixel (±1 rounding)",
+      "ok": true
+    },
+    {
+      "name": "visual: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "visual: canvas ends on the stable smile.png pose (±1 rounding), on a transparent canvas",
+      "ok": true
+    },
+    {
+      "name": "interactive: one clicked request was recorded with its targets",
+      "ok": true
+    },
+    {
+      "name": "interactive: events and final state equal a Node replay of the recorded request",
+      "ok": true
+    },
+    {
+      "name": "no page exceptions or console errors",
+      "ok": true
+    },
+    {
+      "name": "tick counts fall as the tick cap tightens (the runs really differed)",
+      "ok": true
+    },
+    {
+      "name": "webm-probe: all six alpha VP9 clips decode with alpha preserved and frames matching their own atlas",
+      "ok": true
+    }
+  ],
+  "browser": {
+    "name": "chrome",
+    "product": "Chrome/158.0.8127.36",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "headless": true,
+    "binary": "/usr/bin/google-chrome",
+    "extraArgs": [
+      "--no-sandbox"
+    ]
+  },
+  "midTransition": [
+    {
+      "key": "neutral_concern",
+      "index": 0,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 0,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 0,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 0,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 3,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: smile"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 3,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: smile"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 3,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: smile"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 3,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: smile"
+    }
+  ],
+  "finalPose": {
+    "key": "smile",
+    "index": 0,
+    "keyChangedWhileLoading": false,
+    "differingPixels": 0,
+    "offByOnePixels": 0,
+    "opaquePixels": 15606,
+    "cornerAlpha": 0,
+    "label": "smile | target: smile"
+  },
+  "pageProblems": [],
+  "traceHashes": {
+    "wall-native": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "wall-10fps": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "wall-4fps": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "audio-native": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "visual": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7"
+  },
+  "webmSummary": {
+    "ok": true,
+    "canPlayType": {
+      "vp9": "probably",
+      "webm": "maybe"
+    },
+    "clips": [
+      {
+        "asset": "neutral_smile",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.11,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "neutral_concern",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.63,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.14,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "smile_neutral",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.1,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "smile_concern",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.1,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "concern_neutral",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.63,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.16,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "concern_smile",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.1,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      }
+    ]
+  },
+  "finishedAt": "2026-11-26T17:27:52.368Z",
+  "passed": true,
+  "playback": {
+    "wall-native": {
+      "clock": "wall",
+      "ticks": 285,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 284,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 16.8
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 5,
+        "p95": 6,
+        "max": 6
+      },
+      "faceSamples": 63,
+      "finishedAtClockMs": 4705,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "wall-10fps": {
+      "clock": "wall",
+      "ticks": 48,
+      "skippedFrames": 234,
+      "tickDeltaMs": {
+        "count": 47,
+        "p50": 100,
+        "p95": 100.1,
+        "max": 100.1
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 20,
+        "p95": 20,
+        "max": 20
+      },
+      "faceSamples": 33,
+      "finishedAtClockMs": 4720,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "wall-4fps": {
+      "clock": "wall",
+      "ticks": 20,
+      "skippedFrames": 266,
+      "tickDeltaMs": {
+        "count": 19,
+        "p50": 250,
+        "p95": 250.1,
+        "max": 250.1
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 6,
+        "p95": 206,
+        "max": 206
+      },
+      "faceSamples": 16,
+      "finishedAtClockMs": 4755,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "audio-native": {
+      "clock": "audio",
+      "ticks": 287,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 286,
+        "p50": 16.7,
+        "p95": 16.7,
+        "max": 16.8
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 9,
+        "p95": 11,
+        "max": 11
+      },
+      "faceSamples": 63,
+      "finishedAtClockMs": 4710,
+      "audioState": "running",
+      "audioSampleRate": 44100
+    },
+    "visual": {
+      "clock": "wall",
+      "ticks": 278,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 277,
+        "p50": 16.7,
+        "p95": 16.7,
+        "max": 100
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 7,
+        "p95": 7,
+        "max": 7
+      },
+      "faceSamples": 61,
+      "finishedAtClockMs": 4707,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "interactive": {
+      "clock": "wall",
+      "ticks": 152,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 151,
+        "p50": 16.7,
+        "p95": 16.7,
+        "max": 16.8
+      },
+      "startLagMs": {
+        "count": 1,
+        "p50": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "faceSamples": 14,
+      "finishedAtClockMs": 2516,
+      "audioState": null,
+      "audioSampleRate": null
+    }
+  }
+}

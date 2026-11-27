@@ -1,0 +1,596 @@
+{
+  "schema": "adaptive-asset-smoke/1",
+  "startedAt": "2026-11-26T15:54:08.414Z",
+  "host": {
+    "platform": "darwin",
+    "release": "27.0.0",
+    "arch": "arm64",
+    "cpu": "Apple M1 Pro",
+    "cores": 10,
+    "memoryGb": 32,
+    "node": "v24.2.0",
+    "ci": false
+  },
+  "scenario": {
+    "script": "130:tense,350:friendly,2000:tense,2900:neutral,3000:friendly",
+    "untilMs": 4700
+  },
+  "referenceHash": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+  "referenceEvents": [
+    "200 face start neutral->concern",
+    "800 face end neutral->concern",
+    "800 face start concern->smile",
+    "1400 face end concern->smile",
+    "2000 audio start calm->alert",
+    "2000 face start smile->concern",
+    "2400 audio end calm->alert",
+    "2600 face end smile->concern",
+    "3000 face start concern->neutral",
+    "3600 face end concern->neutral",
+    "3600 face start neutral->smile",
+    "4000 audio start alert->calm",
+    "4200 face end neutral->smile",
+    "4400 audio end alert->calm"
+  ],
+  "checks": [
+    {
+      "name": "wall-native: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "wall-native: clock source is wall",
+      "ok": true
+    },
+    {
+      "name": "wall-native: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "wall-native: every transition drew at least 6 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: clock source is wall",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: every transition drew at least 1 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "wall-10fps: ticks were really limited to about 10 per second",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: clock source is wall",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: every transition drew at least 1 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "wall-4fps: ticks were really limited to about 4 per second",
+      "ok": true
+    },
+    {
+      "name": "audio-native: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "audio-native: clock source is audio",
+      "ok": true
+    },
+    {
+      "name": "audio-native: page reported itself visible when it finished",
+      "ok": true
+    },
+    {
+      "name": "audio-native: every transition drew at least 6 distinct atlas frame(s)",
+      "ok": true
+    },
+    {
+      "name": "audio-native: AudioContext reported running (says nothing about audible output)",
+      "ok": true
+    },
+    {
+      "name": "visual: canvas shows the transition atlas frame the app selected, pixel for pixel (±1 rounding)",
+      "ok": true
+    },
+    {
+      "name": "visual: logical trace equals the Node reference replay",
+      "ok": true
+    },
+    {
+      "name": "visual: canvas ends on the stable smile.png pose (±1 rounding), on a transparent canvas",
+      "ok": true
+    },
+    {
+      "name": "interactive: one clicked request was recorded with its targets",
+      "ok": true
+    },
+    {
+      "name": "interactive: events and final state equal a Node replay of the recorded request",
+      "ok": true
+    },
+    {
+      "name": "no page exceptions or console errors",
+      "ok": true
+    },
+    {
+      "name": "tick counts fall as the tick cap tightens (the runs really differed)",
+      "ok": true
+    },
+    {
+      "name": "webm-probe: all six alpha VP9 clips decode with alpha preserved and frames matching their own atlas",
+      "ok": true
+    }
+  ],
+  "browser": {
+    "name": "chrome",
+    "product": "Chrome/158.0.8127.37",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36",
+    "headless": false,
+    "binary": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "extraArgs": []
+  },
+  "midTransition": [
+    {
+      "key": "neutral_concern",
+      "index": 0,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 0,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 0,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 1,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 1,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 1,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 1,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 1,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    },
+    {
+      "key": "neutral_concern",
+      "index": 1,
+      "keyChangedWhileLoading": false,
+      "differingPixels": 0,
+      "offByOnePixels": 52,
+      "opaquePixels": 15606,
+      "cornerAlpha": 0,
+      "label": "neutral → concern | target: concern"
+    }
+  ],
+  "finalPose": {
+    "key": "smile",
+    "index": 0,
+    "keyChangedWhileLoading": false,
+    "differingPixels": 0,
+    "offByOnePixels": 52,
+    "opaquePixels": 15606,
+    "cornerAlpha": 0,
+    "label": "smile | target: smile"
+  },
+  "pageProblems": [],
+  "traceHashes": {
+    "wall-native": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "wall-10fps": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "wall-4fps": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "audio-native": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7",
+    "visual": "396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7"
+  },
+  "webmSummary": {
+    "ok": true,
+    "canPlayType": {
+      "vp9": "probably",
+      "webm": "maybe"
+    },
+    "clips": [
+      {
+        "asset": "neutral_smile",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.11,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "neutral_concern",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.63,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.14,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "smile_neutral",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.1,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "smile_concern",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.1,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "concern_neutral",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.63,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.16,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      },
+      {
+        "asset": "concern_smile",
+        "declaredDurationMs": 600,
+        "loaded": true,
+        "ended": true,
+        "error": null,
+        "durationS": 0.6,
+        "width": 192,
+        "height": 192,
+        "frameClock": "requestVideoFrameCallback",
+        "presentedFrames": 12,
+        "framesObserved": 11,
+        "distinctAtlasIndexes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "alphaPreserved": true,
+        "maxColorDiff": 0.62,
+        "maxAlphaDiff": 0.07,
+        "maxFeatureDiff": 1.1,
+        "maxIndexOffset": 0,
+        "contentMatches": true,
+        "durationMatches": true,
+        "ok": true
+      }
+    ]
+  },
+  "finishedAt": "2026-11-26T15:54:39.984Z",
+  "passed": true,
+  "playback": {
+    "wall-native": {
+      "clock": "wall",
+      "ticks": 564,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 563,
+        "p50": 8.3,
+        "p95": 10.2,
+        "max": 16.8
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 1,
+        "p95": 7,
+        "max": 7
+      },
+      "faceSamples": 63,
+      "finishedAtClockMs": 4701,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "wall-10fps": {
+      "clock": "wall",
+      "ticks": 48,
+      "skippedFrames": 524,
+      "tickDeltaMs": {
+        "count": 47,
+        "p50": 100,
+        "p95": 108.1,
+        "max": 108.6
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 20,
+        "p95": 97,
+        "max": 97
+      },
+      "faceSamples": 32,
+      "finishedAtClockMs": 4753,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "wall-4fps": {
+      "clock": "wall",
+      "ticks": 20,
+      "skippedFrames": 553,
+      "tickDeltaMs": {
+        "count": 19,
+        "p50": 250,
+        "p95": 258.6,
+        "max": 258.6
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 24,
+        "p95": 214,
+        "max": 214
+      },
+      "faceSamples": 16,
+      "finishedAtClockMs": 4772,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "audio-native": {
+      "clock": "audio",
+      "ticks": 580,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 579,
+        "p50": 8.3,
+        "p95": 10,
+        "max": 10.5
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 5,
+        "p95": 8,
+        "max": 8
+      },
+      "faceSamples": 63,
+      "finishedAtClockMs": 4704,
+      "audioState": "running",
+      "audioSampleRate": 44100
+    },
+    "visual": {
+      "clock": "wall",
+      "ticks": 563,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 562,
+        "p50": 8.3,
+        "p95": 9.6,
+        "max": 33.4
+      },
+      "startLagMs": {
+        "count": 7,
+        "p50": 1,
+        "p95": 3,
+        "max": 3
+      },
+      "faceSamples": 63,
+      "finishedAtClockMs": 4710,
+      "audioState": null,
+      "audioSampleRate": null
+    },
+    "interactive": {
+      "clock": "wall",
+      "ticks": 301,
+      "skippedFrames": 0,
+      "tickDeltaMs": {
+        "count": 300,
+        "p50": 8.3,
+        "p95": 9.8,
+        "max": 10.4
+      },
+      "startLagMs": {
+        "count": 1,
+        "p50": 5,
+        "p95": 5,
+        "max": 5
+      },
+      "faceSamples": 14,
+      "finishedAtClockMs": 2504,
+      "audioState": null,
+      "audioSampleRate": null
+    }
+  }
+}

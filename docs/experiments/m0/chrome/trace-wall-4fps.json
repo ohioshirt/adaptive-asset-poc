@@ -1,0 +1,272 @@
+{
+  "logical": {
+    "schema": "adaptive-asset-trace/1",
+    "untilMs": 4700,
+    "requests": [
+      {
+        "atMs": 130,
+        "preset": "tense",
+        "targets": {
+          "face": "concern",
+          "audio": "alert"
+        }
+      },
+      {
+        "atMs": 350,
+        "preset": "friendly",
+        "targets": {
+          "face": "smile",
+          "audio": "calm"
+        }
+      },
+      {
+        "atMs": 2000,
+        "preset": "tense",
+        "targets": {
+          "face": "concern",
+          "audio": "alert"
+        }
+      },
+      {
+        "atMs": 2900,
+        "preset": "neutral",
+        "targets": {
+          "face": "neutral",
+          "audio": "calm"
+        }
+      },
+      {
+        "atMs": 3000,
+        "preset": "friendly",
+        "targets": {
+          "face": "smile",
+          "audio": "calm"
+        }
+      }
+    ],
+    "events": [
+      {
+        "atMs": 200,
+        "track": "face",
+        "type": "start",
+        "from": "neutral",
+        "to": "concern",
+        "durationMs": 600,
+        "asset": "neutral_concern",
+        "startMs": 200,
+        "endMs": 800
+      },
+      {
+        "atMs": 800,
+        "track": "face",
+        "type": "end",
+        "from": "neutral",
+        "to": "concern",
+        "durationMs": 600,
+        "asset": "neutral_concern",
+        "startMs": 200,
+        "endMs": 800
+      },
+      {
+        "atMs": 800,
+        "track": "face",
+        "type": "start",
+        "from": "concern",
+        "to": "smile",
+        "durationMs": 600,
+        "asset": "concern_smile",
+        "startMs": 800,
+        "endMs": 1400
+      },
+      {
+        "atMs": 1400,
+        "track": "face",
+        "type": "end",
+        "from": "concern",
+        "to": "smile",
+        "durationMs": 600,
+        "asset": "concern_smile",
+        "startMs": 800,
+        "endMs": 1400
+      },
+      {
+        "atMs": 2000,
+        "track": "audio",
+        "type": "start",
+        "from": "calm",
+        "to": "alert",
+        "durationMs": 400,
+        "asset": "calm_alert",
+        "startMs": 2000,
+        "endMs": 2400
+      },
+      {
+        "atMs": 2000,
+        "track": "face",
+        "type": "start",
+        "from": "smile",
+        "to": "concern",
+        "durationMs": 600,
+        "asset": "smile_concern",
+        "startMs": 2000,
+        "endMs": 2600
+      },
+      {
+        "atMs": 2400,
+        "track": "audio",
+        "type": "end",
+        "from": "calm",
+        "to": "alert",
+        "durationMs": 400,
+        "asset": "calm_alert",
+        "startMs": 2000,
+        "endMs": 2400
+      },
+      {
+        "atMs": 2600,
+        "track": "face",
+        "type": "end",
+        "from": "smile",
+        "to": "concern",
+        "durationMs": 600,
+        "asset": "smile_concern",
+        "startMs": 2000,
+        "endMs": 2600
+      },
+      {
+        "atMs": 3000,
+        "track": "face",
+        "type": "start",
+        "from": "concern",
+        "to": "neutral",
+        "durationMs": 600,
+        "asset": "concern_neutral",
+        "startMs": 3000,
+        "endMs": 3600
+      },
+      {
+        "atMs": 3600,
+        "track": "face",
+        "type": "end",
+        "from": "concern",
+        "to": "neutral",
+        "durationMs": 600,
+        "asset": "concern_neutral",
+        "startMs": 3000,
+        "endMs": 3600
+      },
+      {
+        "atMs": 3600,
+        "track": "face",
+        "type": "start",
+        "from": "neutral",
+        "to": "smile",
+        "durationMs": 600,
+        "asset": "neutral_smile",
+        "startMs": 3600,
+        "endMs": 4200
+      },
+      {
+        "atMs": 4000,
+        "track": "audio",
+        "type": "start",
+        "from": "alert",
+        "to": "calm",
+        "durationMs": 400,
+        "asset": "alert_calm",
+        "startMs": 4000,
+        "endMs": 4400
+      },
+      {
+        "atMs": 4200,
+        "track": "face",
+        "type": "end",
+        "from": "neutral",
+        "to": "smile",
+        "durationMs": 600,
+        "asset": "neutral_smile",
+        "startMs": 3600,
+        "endMs": 4200
+      },
+      {
+        "atMs": 4400,
+        "track": "audio",
+        "type": "end",
+        "from": "alert",
+        "to": "calm",
+        "durationMs": 400,
+        "asset": "alert_calm",
+        "startMs": 4000,
+        "endMs": 4400
+      }
+    ],
+    "final": {
+      "atMs": 4700,
+      "snapshot": {
+        "audio": {
+          "state": "calm",
+          "target": "calm",
+          "enteredAt": 4400,
+          "phaseMs": 700,
+          "transition": null
+        },
+        "face": {
+          "state": "smile",
+          "target": "smile",
+          "enteredAt": 4200,
+          "phaseMs": 100,
+          "transition": null
+        }
+      }
+    }
+  },
+  "config": {
+    "script": "130:tense,350:friendly,2000:tense,2900:neutral,3000:friendly",
+    "untilMs": 4700,
+    "maxFps": 4,
+    "autostart": "silent"
+  },
+  "playback": {
+    "clock": "wall",
+    "ticks": 20,
+    "skippedFrames": 266,
+    "tickDeltaMs": {
+      "count": 19,
+      "p50": 250,
+      "p95": 250.1,
+      "max": 250.1
+    },
+    "startLagMs": {
+      "count": 7,
+      "p50": 6,
+      "p95": 206,
+      "max": 206
+    },
+    "faceSamples": [
+      "neutral:0",
+      "neutral_concern:1",
+      "neutral_concern:6",
+      "neutral_concern:11",
+      "concern_smile:4",
+      "concern_smile:9",
+      "smile:0",
+      "smile_concern:0",
+      "smile_concern:5",
+      "smile_concern:10",
+      "concern:0",
+      "concern_neutral:0",
+      "concern_neutral:5",
+      "concern_neutral:10",
+      "neutral_smile:3",
+      "neutral_smile:8"
+    ],
+    "finishedAtClockMs": 4757,
+    "audioState": null,
+    "audioSampleRate": null
+  },
+  "env": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.0.0 Safari/537.36",
+    "devicePixelRatio": 1,
+    "visibility": "visible"
+  }
+}

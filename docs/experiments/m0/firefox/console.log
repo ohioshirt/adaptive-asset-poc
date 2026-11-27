@@ -1,0 +1,37 @@
+ok   wall-native: logical trace equals the Node reference replay
+ok   wall-native: clock source is wall
+ok   wall-native: page reported itself visible when it finished
+ok   wall-native: every transition drew at least 6 distinct atlas frame(s)
+ok   wall-10fps: logical trace equals the Node reference replay
+ok   wall-10fps: clock source is wall
+ok   wall-10fps: page reported itself visible when it finished
+ok   wall-10fps: every transition drew at least 1 distinct atlas frame(s)
+ok   wall-10fps: ticks were really limited to about 10 per second
+ok   wall-4fps: logical trace equals the Node reference replay
+ok   wall-4fps: clock source is wall
+ok   wall-4fps: page reported itself visible when it finished
+ok   wall-4fps: every transition drew at least 1 distinct atlas frame(s)
+ok   wall-4fps: ticks were really limited to about 4 per second
+ok   tick counts fall as the tick cap tightens (the runs really differed)
+ok   webm-probe: all six alpha VP9 clips decode with alpha preserved and frames matching their own atlas
+
+logical trace sha256: 396ccb86d5811005b238fb06375a3464733fd4221748a4435b34389517490ee7
+┌─────────────┬────────┬───────┬─────────────┬─────────────┬──────────────────┬──────────────────┬──────────────┐
+│ (index)     │ clock  │ ticks │ tick p50 ms │ tick p95 ms │ start lag p50 ms │ start lag p95 ms │ face samples │
+├─────────────┼────────┼───────┼─────────────┼─────────────┼──────────────────┼──────────────────┼──────────────┤
+│ wall-native │ 'wall' │ 559   │ 8.3         │ 9.5         │ 3                │ 6                │ 63           │
+│ wall-10fps  │ 'wall' │ 48    │ 100         │ 108.6       │ 12               │ 44               │ 33           │
+│ wall-4fps   │ 'wall' │ 20    │ 250         │ 257.7       │ 15               │ 206              │ 16           │
+└─────────────┴────────┴───────┴─────────────┴─────────────┴──────────────────┴──────────────────┴──────────────┘
+┌─────────────────┬──────┬────────────┬───────────┬─────────┬───────┬─────────┬──────────────────┬────────────────┬────────────────┬───────┐
+│ (index)         │ ok   │ duration s │ presented │ sampled │ alpha │ content │ max feature diff │ max color diff │ max alpha diff │ error │
+├─────────────────┼──────┼────────────┼───────────┼─────────┼───────┼─────────┼──────────────────┼────────────────┼────────────────┼───────┤
+│ neutral_smile   │ true │ 0.6        │ 12        │ 12      │ true  │ true    │ 1.11             │ 0.62           │ 0.07           │ ''    │
+│ neutral_concern │ true │ 0.6        │ 12        │ 12      │ true  │ true    │ 1.14             │ 0.63           │ 0.07           │ ''    │
+│ smile_neutral   │ true │ 0.6        │ 12        │ 12      │ true  │ true    │ 1.1              │ 0.62           │ 0.07           │ ''    │
+│ smile_concern   │ true │ 0.6        │ 12        │ 12      │ true  │ true    │ 1.1              │ 0.62           │ 0.07           │ ''    │
+│ concern_neutral │ true │ 0.6        │ 12        │ 12      │ true  │ true    │ 1.16             │ 0.63           │ 0.07           │ ''    │
+│ concern_smile   │ true │ 0.6        │ 12        │ 12      │ true  │ true    │ 1.1              │ 0.62           │ 0.07           │ ''    │
+└─────────────────┴──────┴────────────┴───────────┴─────────┴───────┴─────────┴──────────────────┴────────────────┴────────────────┴───────┘
+artifacts: artifacts/browser-smoke/firefox
+PASS 16 checks

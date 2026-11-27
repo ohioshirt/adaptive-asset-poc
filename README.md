@@ -9,7 +9,8 @@
 Node.js 20+ と Python 3 があれば依存パッケージのインストールは不要。
 
 ```sh
-npm test
+npm test                # ランタイムとトレース記録の決定論テスト（Node 20+）
+npm run test:browser    # 実ブラウザのスモークテスト（Node 22+ と Chrome。npm install 不要）
 npm run demo
 # http://127.0.0.1:8000/demo/
 ```
@@ -21,10 +22,14 @@ npm run demo
 - `src/runtime.mjs`: deterministic, renderer-independent control plane
 - `demo/manifest.mjs`: independent graphs and semantic presets
 - `demo/index.html`, `app.mjs`: browser demonstration (Canvas RGBA frames + Web Audio)
+- `demo/session.mjs`, `scenario.mjs`: application-layer request stamping, observable trace and the scripted baseline scenario
+- `demo/webm-probe.html`, `webm-probe.mjs`: plays the alpha WebM clips in `<video>` and checks decoded alpha/pixels against the PNG atlases (not runtime-driven)
+- `smoke/`: dependency-free browser smoke test (static server, minimal CDP client, harness)
 - `demo/assets/`: synthetic RGBA PNG atlases, alpha VP9 WebM clips, two original 2-second WAV loops
 - `tools/generate_assets.py`: reproducible synthetic media generator (Pillow + FFmpeg/libvpx-vp9)
 - `test/`: runtime invariants and replay tests
 - `docs/design.md`: contracts, limitations and next experiments
+- `docs/experiments/m0-baseline.md`: M0 evidence, commands, results and unverified items
 - `AGENTS.md`: guardrails for follow-up agents
 
 ## What this demonstrates / what it doesn't
@@ -35,6 +40,20 @@ npm run demo
 - 生成AIを用いた自然な人物動画、Godot/rigtext接続、独立レイヤーの身体的整合性、音響のサンプル精度、任意割込み、遷移素材の自動生成と検証は未実装。
 
 See [design notes](docs/design.md) for the falsifiable next experiment.
+
+## Reproducible trace
+
+デモは URL パラメータで要求を論理時刻に固定して再生できる。同じスクリプトなら、フレームレートが違っても論理トレース（要求・イベント・最終状態）は一致する。見た目の遅延は一致しない。
+
+```
+/demo/?script=130:tense,350:friendly&until=2000&autostart=silent&maxFps=10
+```
+
+- `script`: `論理時刻ms:プリセット` のカンマ区切り。`until`: その論理時刻でセッションを止めてトレースを確定する。
+- `maxFps`: アニメーションフレームを間引く。`autostart=silent`: クリックなしで無音開始。`bg`: `blue` / `warm` / `check`。
+- 「トレースJSONを保存」または `window.__adaptiveAsset.trace()` でトレースを取得できる。
+
+`npm run test:browser` はこの仕組みで 3 種類のフレームレートと音声クロックのトレースを取り、Node 側の参照リプレイと照合する。Chrome 以外は `SMOKE_BROWSER=firefox|safari|manual` で実行する（詳細は [M0 の実験ノート](docs/experiments/m0-baseline.md)）。
 
 ## Regenerate media (optional)
 

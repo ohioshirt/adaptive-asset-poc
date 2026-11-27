@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="data:,">
+<title>WebM Playback Probe</title>
+<style>
+:root{color-scheme:dark;font:15px system-ui,sans-serif;background:#101722;color:#e0e8f4}body{max-width:1000px;margin:32px auto;padding:0 16px}h1{font-size:25px}p{color:#b9c9da;line-height:1.6}a{color:#8fe3d6}
+#grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+figure{margin:0;border:1px solid #35465e;border-radius:8px;padding:10px}figure[data-ok=true]{border-color:#68d7c6}figure[data-ok=false]{border-color:#ffb1a5}
+.pair{display:flex;gap:6px;flex-wrap:wrap;background:repeating-conic-gradient(#9b9b9b 0% 25%,#ddd 0% 50%) 0 / 24px 24px;border-radius:6px;padding:4px}
+.pair video,.pair img{width:136px;height:136px;display:block}.video{width:136px;height:136px}
+figcaption{font-size:13px;margin-top:8px;color:#b9c9da;line-height:1.5}
+pre{font:12px ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#182332;padding:12px;border-radius:8px}
+</style>
+<main><h1>WebM Playback Probe</h1>
+<p>同梱の透過 VP9 WebM を <code>&lt;video&gt;</code> で実際に再生し、デコードされたフレームのアルファと画素を PNG アトラスと照合する。各枠の左が再生中の WebM、右が遷移先の静止 PNG。市松模様が透けて見えればアルファが保持されている。ランタイム駆動の再生や知覚品質の検証ではない。<a href="./">デモへ戻る</a></p>
+<div id="grid"></div><pre id="summary">計測中…</pre></main>
+<script type="module" src="./webm-probe.mjs"></script></html>

@@ -33,7 +33,7 @@ function renderFace(s){
   const t=s.transition, key=t?t.asset:s.state;
   const index=t?Math.min(12,Math.floor(t.progress*12)):0;
   ctx.clearRect(0,0,192,192);ctx.drawImage(images.get(key),index*192,0,192,192,0,0,192,192);
-  lastFace={key,index};if(running||session.done)playback.faceSamples.add(`${key}:${index}`);
+  lastFace={key,index,nowMs:runtime.now};if(running||session.done)playback.faceSamples.add(`${key}:${index}`);
 }
 function renderAudio(s){
   if(!audio)return;

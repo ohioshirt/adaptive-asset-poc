@@ -9,10 +9,11 @@
 //
 // What it asserts: the logical trace produced in the browser equals a reference replay computed in
 // Node at every tick rate; the tick rates really differed; every transition put atlas frames on the
-// canvas. On Chrome it also pixel-checks the canvas against the frame the app selected, drives one
-// real click on a preset, and runs the scenario on the audio clock. Separately it records (and for
-// Chrome requires) that the alpha VP9 WebM files decode with alpha and match their own atlas.
-// It does not assess perceived quality, audible output, or whether the app selects the right frame.
+// canvas. On Chrome it also pixel-checks the canvas against the frame the app drew, checks that this
+// is the frame the reference events imply for the logical time of the draw, drives one real click on
+// a preset, and runs the scenario on the audio clock. Separately it records (and for Chrome requires)
+// that the alpha VP9 WebM files decode with alpha and match their own atlas.
+// It does not assess perceived quality or audible output.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -46,7 +47,21 @@ const referenceRequests = script.map(({ atMs, preset }) => ({ atMs, preset, targ
 const reference = { schema: 'adaptive-asset-trace/1', untilMs: baseline.untilMs, requests: referenceRequests, ...replay(new Runtime(manifest), referenceRequests, baseline.untilMs) };
 
 const referenceAssets = [...new Set(reference.events.filter(e => e.track === 'face' && e.type === 'start').map(e => e.asset))];
+const FRAMES_PER_CLIP = 12;
 const MIN_NATIVE_FRAMES = 6; // of 12 per 600 ms clip; uncapped runs on a slow machine may miss some
+const faceTrack = manifest.tracks.find(t => t.id === 'face');
+
+// Which atlas frame should be on the canvas at a logical time. Computed from the reference events
+// alone, so it does not depend on the app's own frame selection.
+function expectedFace(nowMs) {
+  let key = faceTrack.initial, index = 0, start = null;
+  for (const e of reference.events) {
+    if (e.track !== 'face' || e.atMs > nowMs) continue;
+    if (e.type === 'start') start = e; else { start = null; key = e.to; }
+  }
+  if (start) { key = start.asset; index = Math.floor((nowMs - start.atMs) * FRAMES_PER_CLIP / faceTrack.transitions.find(t => t.asset === start.asset).durationMs); }
+  return { key, index };
+}
 
 function demoUrl(origin, { label, maxFps, autostart = true, bg }) {
   const q = new URLSearchParams({ script: baseline.script, until: String(baseline.untilMs), report: label });
@@ -91,7 +106,7 @@ const canvasCheck = `(async()=>{
   x.drawImage(im,face.index*192,0,192,192,0,0,192,192);
   const want=x.getImageData(0,0,192,192).data,got=document.getElementById('face').getContext('2d').getImageData(0,0,192,192).data;
   let differing=0,offByOne=0,opaque=0;for(let i=0;i<want.length;i+=4){if(got[i+3]===255)opaque++;const d=Math.max(Math.abs(want[i]-got[i]),Math.abs(want[i+1]-got[i+1]),Math.abs(want[i+2]-got[i+2]),Math.abs(want[i+3]-got[i+3]));if(d>1)differing++;else if(d===1)offByOne++;}
-  return {key:face.key,index:face.index,keyChangedWhileLoading:face.key!==key,differingPixels:differing,offByOnePixels:offByOne,opaquePixels:opaque,cornerAlpha:got[3],label:document.getElementById('face-state').textContent};})()`;
+  return {key:face.key,index:face.index,nowMs:face.nowMs,done:window.__adaptiveAsset.done,keyChangedWhileLoading:face.key!==key,differingPixels:differing,offByOnePixels:offByOne,opaquePixels:opaque,cornerAlpha:got[3],label:document.getElementById('face-state').textContent};})()`;
 
 async function runChrome(server, results) {
   const extraArgs = (process.env.SMOKE_CHROME_ARGS ?? '').split(' ').filter(Boolean);
@@ -125,18 +140,31 @@ async function runChrome(server, results) {
     // Visual run (not timed): pixel checks and screenshots mid-transition and at the end.
     await step('visual', async () => {
       await page.navigate(demoUrl(server.origin, { label: 'visual', bg: 'check' }));
-      await page.waitFor(`document.getElementById('face-state').textContent.includes('→')`, 10000, 10);
-      const transitionAssets = new Set(manifest.tracks.find(t => t.id === 'face').transitions.map(t => t.asset));
-      // The clock keeps running, so sample a few times and keep the samples taken inside a transition.
-      const samples = [];
-      for (let i = 0; i < 8; i++) samples.push(await page.evaluate(canvasCheck));
+      await page.waitFor(`window.__adaptiveAsset?.lastFace`, 10000, 10);
+      const transitionAssets = new Set(faceTrack.transitions.map(t => t.asset));
+      // The clock keeps running, so sample until enough distinct frames past frame 0 have been seen
+      // inside a transition. Any transition of the scenario will do; the wait ends when the run does.
+      const WANT_LATER_FRAMES = 3, deadline = Date.now() + baseline.untilMs + 10000;
+      const distinct = new Map(), bad = [];
+      let attempts = 0, pageDone = false;
+      const laterFrames = () => [...distinct.values()].filter(s => s.index > 0).length;
+      while (laterFrames() < WANT_LATER_FRAMES && !pageDone && Date.now() < deadline) {
+        const s = await page.evaluate(canvasCheck); attempts++;
+        pageDone = s.done;
+        if (!transitionAssets.has(s.key) || s.keyChangedWhileLoading) continue;
+        const want = expectedFace(s.nowMs);
+        if (s.differingPixels !== 0 || s.cornerAlpha !== 0 || !s.label.includes('→') || s.key !== want.key || s.index !== want.index) bad.push({ ...s, expected: want });
+        if (!distinct.has(`${s.key}:${s.index}`)) distinct.set(`${s.key}:${s.index}`, s);
+      }
       await writeFile(join(outDir, 'demo-mid-transition.png'), await page.screenshot());
-      results.midTransition = samples;
-      const inFlight = samples.filter(s => transitionAssets.has(s.key) && !s.keyChangedWhileLoading);
-      check('visual: canvas shows the transition atlas frame the app selected, pixel for pixel (±1 rounding)', () => {
-        assert.ok(inFlight.length > 0, `no sample landed inside a transition: ${JSON.stringify(samples.map(s => s.key))}`);
-        for (const s of inFlight) { assert.equal(s.differingPixels, 0, `${s.key}:${s.index}`); assert.equal(s.cornerAlpha, 0); assert.ok(s.label.includes('→'), s.label); }
-        assert.ok(inFlight.some(s => s.index > 0), 'only frame 0 was ever sampled');
+      results.midTransition = { attempts, samples: [...distinct.values()], bad };
+      check('visual: canvas shows the atlas frame the app drew, pixel for pixel (±1 rounding)', () => {
+        assert.ok(laterFrames() >= WANT_LATER_FRAMES, `saw ${laterFrames()} distinct frame(s) past frame 0 in ${attempts} samples: ${JSON.stringify([...distinct.keys()])}`);
+        for (const s of bad) { assert.equal(s.differingPixels, 0, `${s.key}:${s.index}`); assert.equal(s.cornerAlpha, 0); assert.ok(s.label.includes('→'), s.label); }
+      });
+      check('visual: the drawn frame is the one the reference events imply for its logical time', () => {
+        assert.ok(distinct.size > 0, 'no sample landed inside a transition');
+        for (const s of bad) assert.deepEqual({ key: s.key, index: s.index }, s.expected, `at ${s.nowMs} ms`);
       });
       results.traces.visual = await server.report('visual', RUN_TIMEOUT_MS);
       await page.waitFor(`window.__adaptiveAsset.done && !window.__adaptiveAsset.running`, 5000);
@@ -146,6 +174,7 @@ async function runChrome(server, results) {
       results.finalPose = await page.evaluate(canvasCheck);
       check(`visual: canvas ends on the stable ${finalState}.png pose (±1 rounding), on a transparent canvas`, () => {
         assert.equal(results.finalPose.key, finalState);
+        assert.deepEqual(expectedFace(results.finalPose.nowMs), { key: finalState, index: 0 });
         assert.equal(results.finalPose.differingPixels, 0);
         assert.equal(results.finalPose.cornerAlpha, 0);
         assert.ok(results.finalPose.opaquePixels > 1000, `only ${results.finalPose.opaquePixels} opaque pixels`);
@@ -240,7 +269,11 @@ async function main() {
     const probe = results.webmProbe;
     if (!probe) throw Error('no WebM probe result');
     results.webmSummary = { ok: probe.ok, canPlayType: probe.canPlayType, clips: probe.clips.map(({ frames, ...rest }) => rest) };
-    const probeCheck = () => assert.ok(probe.ok, `clips failing: ${probe.clips.filter(c => !c.ok).map(c => `${c.asset} (${c.error ?? (!c.alphaPreserved ? 'alpha lost' : !c.contentMatches ? 'content mismatch' : 'other')})`).join(', ')}`);
+    // Do not trust the page's own verdict alone: an empty or partial clip list must fail too.
+    const probeCheck = () => {
+      assert.deepEqual(probe.clips.map(c => c.asset).sort(), faceTrack.transitions.map(t => t.asset).sort());
+      assert.ok(probe.clips.every(c => c.ok === true) && probe.ok === true, `clips failing: ${probe.clips.filter(c => !c.ok).map(c => `${c.asset} (${c.error ?? (!c.alphaPreserved ? 'alpha lost' : !c.contentMatches ? 'content mismatch' : 'other')})`).join(', ')}`);
+    };
     if (requireWebm) check('webm-probe: all six alpha VP9 clips decode with alpha preserved and frames matching their own atlas', probeCheck);
     else console.log(`note webm-probe recorded, not required: ok=${probe.ok}`);
   } catch (e) { failure = e; console.log(`ERROR ${e.message}`); }
